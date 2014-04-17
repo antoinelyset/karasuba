@@ -1,0 +1,3 @@
+class Karasuba
+  VERSION = "0.0.1"
+end
