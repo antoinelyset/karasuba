@@ -1,11 +1,11 @@
 class Karasuba
   class Link
-    attr_accessor :href, :text, :position
+    attr_accessor :href, :href, :text
 
-    def initialize(href = '', position = 0, text = '')
-      @href     = href
-      @text     = text
-      @position = position
+    def initialize(element, href = '', text = '')
+      @element = element
+      @href    = href
+      @text    = text
     end
   end
 end

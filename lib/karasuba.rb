@@ -2,25 +2,24 @@ require 'nokogiri'
 
 require 'karasuba/version'
 require 'karasuba/todo'
-require 'karasuba/todo_list'
 require 'karasuba/link'
+require 'karasuba/link_appender'
 require 'karasuba/finder'
 
 class Karasuba
-  attr_reader :parsed
+  attr_reader :parsed, :finder
 
   def initialize(note_or_string)
-    @finder = Finder.new
-    parser = Nokogiri::XML::SAX::Parser.new(@finder)
-    if note_or_string.respond_to?(:content)
-      parser.parse(note_or_string.content)
+    @parsed = if note_or_string.respond_to?(:content)
+      Nokogiri.parse(note_or_string.content)
     else
-      parser.parse(note_or_string)
+      Nokogiri.parse(note_or_string)
     end
+    @finder = Finder.new(parsed)
   end
 
   def todos
-    @finder.todos
+    finder.todos
   end
 end
 

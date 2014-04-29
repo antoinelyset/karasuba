@@ -1,16 +1,21 @@
 class Karasuba
   class LinkAppender
-    attr_reader :todo_list, :xml_parsed
+    attr_reader :append_point
 
-    def initialize(todo, xml)
-      @todo_list  = todo_list
-      @xml_parsed = xml_parsed
+    def initialize(append_point)
+      binding.pry unless append_point
+      @append_point = append_point
     end
 
-    def append(todo_list, regex = nil)
-      todo_list.list.each_with_index do |todo, i|
-        todo.linked?(regex)
-      end
+    def append_link(href, text = '')
+      node = Nokogiri::XML::Node.new('a', document)
+      node['href'] = href
+      node.content = text
+      append_point.next = node
+    end
+
+    def document
+      append_point.document
     end
   end
 end
