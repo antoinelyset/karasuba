@@ -64,9 +64,9 @@ class Karasuba
       !links(href).empty?
     end
 
-    def append_link(href, text = '')
+    def append_link(href, text = '', options = {})
       appender = LinkAppender.new(append_link_point || self.element)
-      appender.append_link(href, text)
+      appender.append_link(href, text, options)
     end
 
     private
