@@ -47,21 +47,21 @@ class Karasuba
     def remove_links(href = nil)
       links(href).each do |link|
         link.element.remove
-        self.following_siblings.delete(link)
+        self.following_siblings.delete(link.element)
       end
     end
 
     def clean_links(href = nil)
-      links(href).each do |link|
+      links(href).map do |link|
         if link.element.xpath('.//text()').empty?
           link.element.remove
-          self.following_siblings.delete(link)
+          self.following_siblings.delete(link.element)
         end
-      end
+      end.compact
     end
 
     def linked?(href = nil)
-      !!links(href)
+      !links(href).empty?
     end
 
     def append_link(href, text = '')
