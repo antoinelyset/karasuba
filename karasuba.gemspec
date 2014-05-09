@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.files         = `git ls-files app lib`.split("\n")
   s.platform      = Gem::Platform::RUBY
   s.require_paths = ['lib']
-  s.add_runtime_dependency('nokogiri', '~> 1.6')
+  s.add_runtime_dependency('nokogiri', '> 1.5')
 
   s.add_development_dependency('bundler', '> 1.3')
   s.add_development_dependency('rake')

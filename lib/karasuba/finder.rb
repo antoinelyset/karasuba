@@ -16,7 +16,7 @@ class Karasuba
     end
 
     def find_todo(todo_element)
-      current_todo = Todo.new(todo_element, todo_element["checked"] == "true")
+      current_todo = Todo.new(todo_element)
       cursor       = todo_element
       while(cursor = next_element(cursor))
         stop_todo(current_todo, cursor) && break if STOPPING_ELEMENTS.include?(cursor.name)

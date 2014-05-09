@@ -3,7 +3,6 @@ class Karasuba
     attr_reader :append_point
 
     def initialize(append_point)
-      binding.pry unless append_point
       @append_point = append_point
     end
 
