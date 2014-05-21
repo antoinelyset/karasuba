@@ -65,6 +65,11 @@ class Karasuba
       appender.append_footer(text, options)
     end
 
+    def equivalent?(doc_or_string)
+      doc_or_string = Nokogiri.parse(doc_or_string) if doc_or_string.is_a?(String)
+      EquivalentXml.equivalent?(self.xml, doc_or_string, element_order: true, normalize_whitespace: true)
+    end
+
     private
 
     # TODO Test with empty en-note

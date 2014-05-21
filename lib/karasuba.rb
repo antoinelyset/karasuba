@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'equivalent-xml'
 
 require 'karasuba/version'
 require 'karasuba/todo'
@@ -17,6 +18,10 @@ class Karasuba
       Nokogiri.parse(note_or_string)
     end
     @note = Note.new(xml)
+  end
+
+  def equivalent?(doc_or_string)
+    note.equivalent?(doc_or_string)
   end
 
   def todos
