@@ -4,22 +4,23 @@ require 'karasuba/version'
 require 'karasuba/todo'
 require 'karasuba/link'
 require 'karasuba/link_appender'
-require 'karasuba/finder'
+require 'karasuba/footer_appender'
+require 'karasuba/note'
 
 class Karasuba
-  attr_reader :parsed, :finder
+  attr_reader :xml, :note
 
   def initialize(note_or_string)
-    @parsed = if note_or_string.respond_to?(:content)
+    @xml = if note_or_string.respond_to?(:content)
       Nokogiri.parse(note_or_string.content)
     else
       Nokogiri.parse(note_or_string)
     end
-    @finder = Finder.new(parsed)
+    @note = Note.new(xml)
   end
 
   def todos
-    finder.todos
+    note.todos
   end
 end
 

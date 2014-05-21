@@ -1,13 +1,14 @@
 class Karasuba
-  class Finder
-    attr_reader :todos
+  class Note
+    attr_reader :xml, :todos
 
     STOPPING_ELEMENTS     = ['en-todo', 'br', 'en-note']
     IGNORED_TEXT_ELEMENTS = ['a', 'img', 'map', 'table']
 
-    def initialize(document)
+    def initialize(xml)
+      @xml = xml
       @todos = []
-      @todo_elements = document.xpath('//en-todo')
+      @todo_elements = xml.xpath('//en-todo')
       instanciate_todos
     end
 
@@ -53,6 +54,22 @@ class Karasuba
 
     def is_root?(element)
       element.name == 'en-note'
+    end
+
+    def footer?(title)
+      self.xml.xpath("//*[attribute::title=\"#{title}\"]").last
+    end
+
+    def append_footer(text, options = {})
+      appender = FooterAppender.new(append_footer_point)
+      appender.append_footer(text, options)
+    end
+
+    private
+
+    # TODO Test with empty en-note
+    def append_footer_point
+      self.xml.xpath('//en-note/child::*[position()=last()]').first
     end
   end
 end
