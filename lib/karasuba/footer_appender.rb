@@ -15,12 +15,14 @@ class Karasuba
     end
 
     def append_footer(text_or_array = '', options = {})
-      text_array        = Array(text_or_array)
-      hr                = horizontal_rule(options)
-      p                 = paragraph(text_nodes(text_array), options)
-      div               = division(hr, p, options)
-      append_point.next = div
-      div
+      text_array = Array(text_or_array)
+      hr         = horizontal_rule(options)
+      p          = paragraph(text_nodes(text_array), options)
+      div        = division(hr, p, options)
+      br         = break_element(options)
+      footer     = Nokogiri::XML::NodeSet.new(document, [br, div])
+      append_point.next = footer
+      footer
     end
 
     def document
@@ -28,6 +30,10 @@ class Karasuba
     end
 
     private
+
+    def break_element(options)
+      Nokogiri::XML::Node.new('br', document)
+    end
 
     def text_nodes(text_array)
       nodes = text_array.inject([]) do |ary, text|
