@@ -21,7 +21,7 @@ class Karasuba
       p          = paragraph(text_nodes(text_array), options)
       div        = division(hr, p, options)
       append_point.next = div
-      footer
+      div
     end
 
     def document
