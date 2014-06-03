@@ -3,7 +3,7 @@ class Karasuba
     attr_reader :xml, :todos
 
     STOPPING_ELEMENTS     = ['en-todo', 'br', 'en-note']
-    IGNORED_TEXT_ELEMENTS = ['img', 'map', 'table']
+    IGNORED_TEXT_ELEMENTS = ['a', 'img', 'map', 'table']
 
     def initialize(xml)
       @xml = xml
