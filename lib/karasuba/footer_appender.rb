@@ -57,7 +57,7 @@ class Karasuba
 
     def division(hr, p, options)
       div          = Nokogiri::XML::Node.new('div', document)
-      div['title'] = options[:title]
+      div['title'] = options[:title] if options[:title]
       div['style'] = options[:style][:division_style] if options[:style]
       br           = break_element
       div.children = Nokogiri::XML::NodeSet.new(document, [br, hr, p])

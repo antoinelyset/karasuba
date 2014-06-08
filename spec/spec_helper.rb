@@ -1,9 +1,10 @@
 # encoding: utf-8
 require 'karasuba'
 
+require 'equivalent-xml'
 require 'coveralls'
-Coveralls.wear!
 
+Coveralls.wear!
 
 module Support
   def self.path
