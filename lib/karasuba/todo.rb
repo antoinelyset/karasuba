@@ -92,6 +92,8 @@ class Karasuba
       @following_siblings = []
       @stopping_sibling   = nil
       @text_sibblings     = []
+      @stopping_link      = nil
+      @stopped_by_link    = false
     end
 
     def parse
