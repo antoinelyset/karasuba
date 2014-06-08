@@ -12,6 +12,9 @@ require 'karasuba/note'
 class Karasuba
   attr_reader :xml, :note
 
+  # @attr note_or_string [String/#content]
+  # @options { ignore_link: { href: [String/Regexp], content: [String/Regexp] },
+  #            stop_link:   { href: [String/Regexp], content: [String/Regexp] } }
   def initialize(note_or_string, options = {})
     @xml = if note_or_string.respond_to?(:content)
       Nokogiri.parse(note_or_string.content)
