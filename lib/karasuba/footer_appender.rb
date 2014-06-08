@@ -15,10 +15,9 @@ class Karasuba
       @append_point = append_point
     end
 
-    def append_footer(text_or_array = '', options = {})
-      text_array = Array(text_or_array)
+    def append_footer(xml_text = '', options = {})
       hr         = horizontal_rule(options)
-      p          = paragraph(text_nodes(text_array), options)
+      p          = paragraph(text_nodes(xml_text), options)
       div        = division(hr, p, options)
       append_point.next = div
       div
@@ -34,12 +33,8 @@ class Karasuba
       Nokogiri::XML::Node.new('br', document)
     end
 
-    def text_nodes(text_array)
-      nodes = text_array.inject([]) do |ary, text|
-        ary << Nokogiri::XML::Text.new(text, document)
-        ary << break_element
-      end
-      nodes.tap(&:pop)
+    def text_nodes(xml_text)
+      Nokogiri::XML::DocumentFragment.parse(xml_text).children
     end
 
     def paragraph(nodes, options)
