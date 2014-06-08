@@ -206,34 +206,75 @@ describe Karasuba::Todo do
 
   context 'for a linked todo with a stopped link' do
     let(:content)     { File.read("#{Support.path}/linked_todo_with_stopped_link/base.enml") }
-    let(:linked_todo) { Karasuba.new(content, stop_link: {href: /example\.com/}).todos.first }
+    let(:stopped_todo) { Karasuba.new(content, stop_link: {href: "https://app.azendoo.com/#tasks/1234"}).todos.first }
 
     it 'parses the title' do
-      expect(linked_todo.title).to eq('Get ')
+      expect(stopped_todo.title).to eq('Get Things Done!')
     end
 
     it 'parses the checked status' do
-      expect(linked_todo.checked).to be_falsy
+      expect(stopped_todo.checked).to be_falsy
     end
 
-    it 'doesnt the stopped link in the links' do
-      expect(linked_todo.linked?).to be_falsy
+    it 'keeps the other non-stopping links' do
+      expect(stopped_todo.linked?).to be_truthy
     end
 
-    it 'doesnt include the following links' do
-      expect(linked_todo.linked?('https://app.azendoo.com')).to be_falsy
+    it 'doesnt include the stopping link' do
+      expect(stopped_todo.linked?('https://app.azendoo.com/#tasks/1234')).to be_falsy
     end
 
-    it 'returns the parsed links for specific urls' do
-      expect(linked_todo.links(/https:\/\/.*\.com/).count).to eq(0)
+    it 'keeps the other links' do
+      expect(stopped_todo.links(/https:\/\/.*\.com/).count).to eq(1)
     end
 
     it 'is stopped by a link' do
-      expect(linked_todo.stopped_by_link?).to be_truthy
+      expect(stopped_todo.stopped_by_link?).to be_truthy
     end
 
     it 'extracts the stop href' do
-      expect(linked_todo.stopping_link.href).to eq('https://example.com')
+      expect(stopped_todo.stopping_link.href).to eq('https://app.azendoo.com/#tasks/1234')
+    end
+
+    describe '#append_link' do
+      let(:href)          { "https://app.azendoo.com/#tasks/1234" }
+      let(:appended_href) { "https://app.azendoo.com/#tasks/5678" }
+
+      it 'appends after the last text sibblings' do
+        todo = Karasuba.new(content, stop_link: {href: href}).todos.first
+        todo.append_link(appended_href, '>')
+        expected = Nokogiri.parse(File.read("#{Support.path}/linked_todo_with_stopped_link/base_with_appended_link.enml"))
+        expect(EquivalentXml.equivalent?(todo.element.document, expected)).to be_truthy
+      end
+
+      it 'updates the title' do
+        todo = Karasuba.new(content, stop_link: {href: href}).todos.first
+        todo.append_link(appended_href, ' Azendoo')
+        expect(todo.title).to eq('Get Things Done! Azendoo')
+      end
+
+      it 'doesnt update the title if this still a stopping_link' do
+        todo = Karasuba.new(content, stop_link: {href: href}).todos.first
+        todo.append_link(href, ' Azendoo')
+        expect(todo.title).to eq('Get Things Done!')
+      end
+
+      it 'changes the stopping_link' do
+        todo = Karasuba.new(content, stop_link: {href: Regexp.new('https://app.azendoo.com/#task')}).todos.first
+        todo.append_link(appended_href, '>')
+        expect(todo.stopping_link.href).to eq(appended_href)
+      end
+    end
+
+    context '#update_title' do
+      let(:href)          { "https://app.azendoo.com/#tasks/1234" }
+
+      it 'updates and erases the links' do
+        todo = Karasuba.new(content, stop_link: {href: href}).todos.first
+        todo.update_title('Azendoo Rocks')
+        expected = Nokogiri.parse(File.read("#{Support.path}/linked_todo_with_stopped_link/base_with_changed_title.enml"))
+        expect(EquivalentXml.equivalent?(todo.element.document, expected)).to be_truthy
+      end
     end
   end
 end

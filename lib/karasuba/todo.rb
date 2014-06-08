@@ -17,6 +17,7 @@ class Karasuba
     def update_title(string)
       @title = string
       self.text_sibblings.each(&:remove)
+      clean_links
       el = title_element(string)
       self.element.next = el
       reset
@@ -54,7 +55,14 @@ class Karasuba
     end
 
     def clean_links(href = nil)
+      regex = Regexp.new(href) if href
       links(href).map do |link|
+        match = if href
+                  regex.match(links.href)
+                else
+                  true
+                end
+        next unless match
         if link.element.xpath('.//text()').empty?
           link.element.remove
         end
