@@ -231,5 +231,9 @@ describe Karasuba::Todo do
     it 'is stopped by a link' do
       expect(linked_todo.stopped_by_link?).to be_truthy
     end
+
+    it 'extracts the stop href' do
+      expect(linked_todo.stopping_link.href).to eq('https://example.com')
+    end
   end
 end

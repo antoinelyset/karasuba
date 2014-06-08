@@ -8,6 +8,7 @@ class Karasuba
       @title              = title
       @following_siblings = following_siblings
       @stopping_sibling   = nil
+      @stopping_link      = nil
       @stopped_by_link    = false
       @text_sibblings     = text_sibblings
       @options            = options
@@ -69,6 +70,11 @@ class Karasuba
 
     def stopped_by_link?
       @stopped_by_link
+    end
+
+    def stopping_link
+      return nil unless stopped_by_link?
+      Link.new(stopping_sibling, stopping_sibling['href'], stopping_sibling.text)
     end
 
     def append_link(href, text = '', options = {})
