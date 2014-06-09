@@ -58,7 +58,7 @@ class Karasuba
       regex = Regexp.new(href) if href
       links(href).map do |link|
         match = if href
-                  regex.match(links.href)
+                  regex.match(link.href)
                 else
                   true
                 end
