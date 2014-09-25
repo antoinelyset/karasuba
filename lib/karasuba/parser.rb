@@ -79,10 +79,14 @@ class Karasuba
     end
 
     def following_element(cursor)
-      cursor.next || (following_element(cursor.parent) unless is_root?(cursor.parent))
+      cursor.next || (following_element(cursor.parent) if followable?(cursor))
     end
 
-    def is_root?(element)
+    def followable?(cursor)
+      cursor.parent && !root?(cursor.parent)
+    end
+
+    def root?(element)
       element.name == 'en-note'
     end
   end
